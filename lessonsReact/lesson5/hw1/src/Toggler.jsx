@@ -4,13 +4,13 @@ class Toggler extends Component {
   constructor() {
     super();
     this.state = {
-      togglerStatus: 'OFF',
+      togglerStatus: 'Off',
     };
   }
 
   setButtonStatus = () => {
     this.setState({
-      togglerStatus: this.state.togglerStatus === 'OFF' ? 'ON' : 'OFF',
+      togglerStatus: this.state.togglerStatus === 'Off' ? 'On' : 'Off',
     });
   };
 
