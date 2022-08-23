@@ -1,7 +1,7 @@
 import React from 'react';
 import User from './User';
 
-class UserList extends React.Component {
+class UsersList extends React.Component {
   state = {
     sorting: null,
   };
@@ -40,4 +40,4 @@ class UserList extends React.Component {
   }
 }
 
-export default UserList;
+export default UsersList;
