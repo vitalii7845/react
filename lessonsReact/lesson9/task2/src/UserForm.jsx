@@ -29,7 +29,7 @@ class UserForm extends React.Component {
 
   render() {
     return (
-      <form className="login-form" onSubmit={this.handleSubmit}>
+      <form className="login-form" onSubmit={() => this.props.onSubmit(this.state)}>
         <h1 className="form-title">Profile</h1>
         <div className="form-control">
           <label className="form-label" htmlFor="name">
@@ -38,10 +38,10 @@ class UserForm extends React.Component {
           <input
             className="form-input"
             value={this.state.name}
+            onChange={this.handleChange}
             type="text"
             id="name"
             name="name"
-            onChange={this.handleChange}
           />
         </div>
         <div className="form-control">
@@ -53,8 +53,8 @@ class UserForm extends React.Component {
             value={this.state.student}
             type="checkbox"
             id="student"
-            name="student"
             onChange={this.handleChange}
+            name="student"
           />
         </div>
         <div className="form-control">
@@ -62,10 +62,10 @@ class UserForm extends React.Component {
             Occupation
           </label>
           <select
-            value={this.state.occupation}
             name="occupation"
-            className="form-input"
+            value={this.state.occupation}
             onChange={this.handleChange}
+            className="form-input"
           >
             <option value="london">London</option>
             <option value="new-york">New York</option>
@@ -78,10 +78,10 @@ class UserForm extends React.Component {
             About
           </label>
           <textarea
-            value={this.state.about}
             name="about"
-            className="form-input"
+            value={this.state.about}
             onChange={this.handleChange}
+            className="form-input"
           />
         </div>
         <button className="submit-button" type="submit">
