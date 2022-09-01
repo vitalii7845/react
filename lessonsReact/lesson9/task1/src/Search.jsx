@@ -13,16 +13,16 @@ class Search extends React.Component {
     });
   };
 
-  search = event => {
+  searchAlert = event => {
     event.preventDefault();
     // console.log(`Search text: ${this.state.value}`);
-    alert(`Search text: {this.state.value}`);
+    alert(`Search text: ${this.state.value}`);
   };
 
   render() {
     return (
       <>
-        <form className="search" onSubmit={this.search}>
+        <form className="search" onSubmit={this.searchAlert}>
           <input
             type="text"
             onChange={this.handleChange}
