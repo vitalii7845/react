@@ -6,7 +6,7 @@ class App extends React.Component {
     isOpen: false,
   };
 
-  changeDialog = () => {
+  showContent = () => {
     this.setState({
       isOpen: !this.state.isOpen,
     });
@@ -21,7 +21,7 @@ class App extends React.Component {
     );
     return (
       <div className="app">
-        <Expand title="some title" isOpen={this.state.isOpen} onClose={this.changeDialog}>
+        <Expand title="some title" isOpen={this.state.isOpen} onClose={this.showContent}>
           {element}
         </Expand>
       </div>
