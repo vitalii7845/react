@@ -5,4 +5,4 @@ import './search.scss';
 import './index.scss';
 
 const rootElem = document.querySelector('#root');
-ReactDOM.render(<Search name="Tom" />, rootElem);
+ReactDOM.render(<Search name="Bob" />, rootElem);

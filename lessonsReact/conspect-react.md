@@ -332,3 +332,978 @@ npm i -D @babel/cli @babel/core @babel/plugin-transform-react-jsx @babel/preset-
 
 // "dependencies" =>:
 npm i -S core-js react react-dom
+
+//
+// functional // = >
+index.jsx =>:
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Search from './Search.jsx';
+import './search.scss';
+import './index.scss';
+
+const rootElem = document.querySelector('#root');
+ReactDOM.render(<Search name="Den" />, rootElem);
+
+Search.jsx => :
+import React from 'react';
+
+const Search = props => {
+return (
+
+<div className="Search">
+<h1 className="search__title">{`Hello, ${props.name}. What to search for you?`}</h1>
+<div className="search__field">
+<input type="text" className="search__input" />
+<button className="search__button">Search</button>
+</div>
+</div>
+);
+};
+
+export default Search;
+
+or v.2 =>
+// export default Search => {
+// return (
+// <div className="Search">
+// <h1 className="search__title">{`Hello, ${Search.name}. What to search for you?`}</h1>
+// <div className="search__field">
+// <input type="text" className="search__input" />
+// <button className="search__button">Search</button>
+// </div>
+// </div>
+// );
+// };
+
+//
+// class
+
+index.jsx => :
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Search from './Search.jsx';
+import './search.scss';
+import './index.scss';
+
+const rootElem = document.querySelector('#root');
+ReactDOM.render(<Search name="Tom" />, rootElem);
+
+Search.jsx => :
+import React, { Component } from 'react';
+
+export default class Search extends Component {
+render() {
+return (
+
+<div className="Search">
+<h1 className="search__title">{`Hello, ${this.props.name}. What to search for you?`}</h1>
+<div className="search__field">
+<input type="text" className="search__input" />
+<button className="search__button">Search</button>
+</div>
+</div>
+);
+}
+}
+
+// = lesson3 =//
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+import './index.scss';
+
+const rootElement = document.querySelector('#root');
+
+ReactDOM.render(<App />, rootElement);
+
+//
+import React from 'react';
+import Profile from './Profile';
+
+const userInfo = {
+firstName: 'James',
+lastName: 'Bond',
+birthDate: '1991-01-17T11:11:11.819Z',
+birthPlace: 'London',
+};
+
+const App = () => {
+return <Profile userData={userInfo} />;
+};
+
+export default App;
+
+//
+
+import React from 'react';
+import moment from 'moment';
+import './profile.scss';
+import ProfileName from './ProfileName';
+
+const Profile = props => {
+const birthDate = moment(new Date(props.userData.birthDate)).format('DD MMM YY');
+return (
+
+<div className="profile">
+<ProfileName userData={props.userData} />
+<div className="profile__birth">{`Was born ${birthDate} in ${props.userData.birthPlace}`}</div>
+</div>
+);
+};
+
+export default Profile;
+
+//
+
+import React from 'react';
+
+const ProfileName = props => {
+return (
+<>
+
+<div className="profile__name">{`${props.userData.firstName} ${props.userData.lastName}`}</div>
+</>
+);
+};
+
+export default ProfileName;
+
+// => // LESSON4 <=> STATE
+
+ways to update component in react =>:
+props // => next lessons
+this.setState() // => ok !!!
+this.forceUpdate() // dyze ridko
+//
+
+index.jsx =>:
+const rootElement = document.querySelector('#root');
+ReactDOM.render(<App />, rootElement);
+//
+App.jsx =>:
+import React from 'react';
+import Counter from './Counter';
+
+const App = () => {
+return (
+<>
+<Counter   />
+</>
+);
+};
+export default App;
+//
+Counter.jsx => :
+
+import React, { Component } from 'react';
+import './counter.scss';
+
+class Counter extends Component {
+constructor() {
+super();
+this.state = {
+counter: 0,
+};
+
+    // ne uzatu, demonstration // Do not do this way
+    setInterval(() => {
+      this.setState({
+        counter: this.state.counter + 1,
+      });
+    }, 1000);
+
+}
+
+render() {
+return <div className="counter">{this.state.counter}</div>;
+}
+}
+export default Counter;
+
+// => // LESSON5 => Event
+
+HTML  
+<button onclick="login()">Login</button>
+//
+React
+<button onClick={login}>Login</button>
+//
+HTML
+
+<form class="login-form">...</form>
+document.querySelector('.login-form').addEventListener('submit', handleLogin);
+//
+React
+<form onSubmit={handleLogin}>...</form>
+//
+
+HTML
+const infoIconElem = document.querySelector('.info');infoIconElem.addEventListener('submit', showTooltip);
+infoIconElem.removeEvenListener('submit', showTooltip);
+//
+React
+<span onMouseEnter={onHover}>...</span>
+//
+HTML
+elem.addEventListener(click, handleClick, true)
+//
+React
+<button onClickCapture={handleClick}>...</button>
+//
+//==
+const GoodButton = () => (
+<button className="fancy-button" onClick={() => alert('Good job!')}>
+Click me!
+</button>
+);
+//=//
+
+class GoodButton extends React.Component {
+handleClick(e) {
+console.log(e.target.textContent); // console => 'Click me!'
+console.log(e.); // target=null
+alert('Good job!');
+}
+render() {
+return (
+<button className="fancy-button" onClick={this.handleClick}>
+Click me!
+</button>
+);
+}
+}
+//=//
+import React from 'react';
+
+class GoodButton extends React.Component {
+handleClick(event) {
+alert(event.target.textContent);
+}
+render() {
+return (
+<button className="fancy-button" onClick={this.handleClick}>
+Click me!
+</button>
+);
+}
+}
+
+export default GoodButton;
+
+// ne vtrachatu content
+
+import React from 'react';
+
+class Counter extends React.Component {
+constructor(props) {
+super(props);
+
+    this.state = {
+      counter: 0,
+    };
+    this.decrement = this.decrement.bind(this); // => + do 1 sposobu ne vtratutu content
+    // this.increment = this.increment.bind(this);
+
+}
+
+decrement() {
+this.setState({
+counter: this.state.counter - 1,
+});
+} // => 1 sposib ne vtratutu content
+
+// increment() {
+// this.setState({
+// counter: this.state.counter + 1,
+// });
+// }
+
+increment = () => {
+this.setState({
+counter: this.state.counter + 1,
+});
+}; // => 2 sposib
+
+reset() {
+this.setState({
+counter: 0,
+});
+} // => 3 sposib
+
+render() {
+return (
+
+<div className="counter">
+<button data-action="decrease" className="counter__button" onClick={this.decrement}> -
+</button>
+<span className="counter**value" onClick={() => this.reset()}>
+{this.state.counter}
+</span>
+<button data-action="increase" className="counter**button" onClick={this.increment}> +
+</button>
+</div>
+);
+}
+}
+
+export default Counter;
+//
+import React, { Component } from 'react';
+
+class ColorPicker extends Component {
+constructor(props) {
+super(props);
+this.state = {
+textColorName: '',
+};
+}
+
+getButtonColor = color => {
+this.setState({
+textColorName: color,
+});
+};
+
+resetColorName = () => {
+this.setState({
+textColorName: '',
+});
+};
+
+render() {
+return (
+
+<div>
+<div className="picker__title">{this.state.textColorName}</div>
+<div>
+<button
+className="picker**button picker**button_coral"
+onMouseEnter={() => this.getButtonColor('Coral')}
+onMouseLeave={this.resetColorName} ></button>
+<button
+className="picker**button picker**button_aqua"
+onMouseEnter={() => this.getButtonColor('Aqua')}
+onMouseLeave={this.resetColorName} ></button>
+<button
+className="picker**button picker**button_bisque"
+onMouseEnter={() => this.getButtonColor('Bisque')}
+onMouseLeave={this.resetColorName} ></button>
+</div>
+</div>
+);
+}
+}
+
+export default ColorPicker;
+
+// => Lesson 6 <=> CONDITIONAL RENDERING
+//
+IF
+&&
+... ? ... : ...
+
+=> if
+function Comp (...) {
+if (...) {
+return <Comp1 />;
+}
+return <Comp2 />;
+};
+//=//
+function Comp (...) {
+if (...) {
+return null;
+}
+return <Comp1 />;
+};
+// = //
+... ? ... : ...
+//
+function Comp (...) {
+return (
+<>
+<Comp1 />
+{Condition ? <Comp2 /> : <Comp3 />}
+</>
+);
+};
+
+// = //
+= &&==
+//
+function Comp (...) {
+return (
+<>
+<Comp1 />
+{Condition && <Comp2 />}
+</>
+);
+};
+//=//=//
+//=> v.1
+const Greeting = props => {
+if (props.isLoggedIn) {
+return (
+<>
+<UserGreeting />
+</>
+);
+}
+return <GuestGreeting />;
+
+//=//=// OR v.2 =>
+const Greeting = props => {
+const { isLoggedIn } = props;
+if (isLoggedIn) {
+return (
+<>
+<UserGreeting />
+</>
+);
+}
+return <GuestGreeting />;
+};
+//<>// OR v.3 =>
+const Greeting = ({ isLoggedIn }) => {
+const { isLoggedIn } = props;
+if (isLoggedIn) {
+return (
+<>
+<UserGreeting />
+</>
+);
+}
+return <GuestGreeting />;
+};
+//////
+import React from 'react';
+import Greeting from './Greeting.jsx';
+
+class Auth extends React.Component {
+constructor(props) {
+super(props);
+
+    this.state = {
+      isLoggedIn: false,
+    };
+
+}
+
+handleLogin = () => {
+this.setState({
+isLoggedIn: true,
+});
+};
+
+handleLogout = () => {
+this.setState({
+isLoggedIn: false,
+});
+};
+
+render() {
+let button;
+
+    if (this.state.isLoggedIn) {
+      button = <button onClick={this.handleLogout}>Logout</button>;
+    } else {
+      button = <button onClick={this.handleLogin}>Login</button>;
+    }
+
+    return (
+      <div className="panel">
+        <Greeting isLoggedIn={this.state.isLoggedIn} />
+        <div>{button}</div>
+      </div>
+    );
+
+}
+}
+
+export default Auth;
+//// or
+
+import React from 'react';
+import Greeting from './Greeting.jsx';
+
+class Auth extends React.Component {
+constructor(props) {
+super(props);
+
+    this.state = {
+      isLoggedIn: false,
+    };
+
+}
+
+handleLogin = () => {
+this.setState({
+isLoggedIn: true,
+});
+};
+
+handleLogout = () => {
+this.setState({
+isLoggedIn: false,
+});
+};
+
+render() {
+const button = this.state.isLoggedIn ? (
+<button onClick={this.handleLogout}>Logout</button>
+) : (
+<button onClick={this.handleLogin}>Login</button>
+);
+
+    return (
+      <div className="panel">
+        <Greeting isLoggedIn={this.state.isLoggedIn} />
+        <div>{button}</div>
+      </div>
+    );
+
+}
+}
+
+export default Auth;
+//=//==//==//
+v.3 =>
+import React from 'react';
+import Greeting from './Greeting.jsx';
+
+class Auth extends React.Component {
+constructor(props) {
+super(props);
+
+    this.state = {
+      isLoggedIn: false,
+    };
+
+}
+
+handleLogin = () => {
+this.setState({
+isLoggedIn: true,
+});
+};
+
+handleLogout = () => {
+this.setState({
+isLoggedIn: false,
+});
+};
+
+render() {
+return (
+
+<div className="panel">
+<Greeting isLoggedIn={this.state.isLoggedIn} />
+<div>
+{this.state.isLoggedIn ? (
+<button onClick={this.handleLogout}>Logout</button>
+) : (
+<button onClick={this.handleLogin}>Login</button>
+)}
+</div>
+</div>
+);
+}
+}
+
+//
+//task => && <=
+
+//index
+const rootElement = document.querySelector('#root');
+ReactDOM.render(<Mailbox unreadMessages={['f', 'f', 'f']} />, rootElement);
+
+//Mailbox
+
+import React from 'react';
+const Mailbox = ({ unreadMessages }) => {
+return (
+
+<div className="mailbox">
+<span className="mailbox__text">Messages</span>
+{unreadMessages.length > 0 && <span className="mailbox__count">{unreadMessages.length}</span>}
+</div>
+);
+};
+export default Mailbox;
+//=//=//=//=//=//=//
+import React from 'react';
+import Message from './Message';
+
+const text1 = 'Hello, world!';
+const text2 = 'Another exciting text.';
+
+class Page extends React.Component {
+state = {
+text: null,
+};
+
+// constructor(props) {
+// super(props);
+// this.state = {
+// text: null,
+// };
+// }
+
+setText = text => {
+this.setState({
+text,
+});
+};
+render() {
+return (
+
+<div className="page">
+<Message text={this.state.text} />
+<div className="actions">
+<button className="btn" onClick={() => this.setText(text1)}>
+Text 1
+</button>
+<button className="btn" onClick={() => this.setText(text2)}>
+Text 2
+</button>
+<button className="btn" onClick={() => this.setText('')}>
+Clear
+</button>
+</div>
+</div>
+);
+}
+}
+
+export default Page;
+//
+import React from 'react';
+
+const Message = ({ text }) => {
+if (!text) {
+return null;
+}
+return <div className="message">{text}</div>;
+};
+
+export default Message;
+////
+//=//=//=//=//=//=//=//=//=
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.scss';
+import Status from './Status';
+
+const rootElement = document.querySelector('#root');
+
+ReactDOM.render(<Status isOnline={true} />, rootElement);
+import React from 'react';
+import Online from './Online';
+import Offline from './Offline';
+
+const Status = ({ isOnline }) => {
+// if (isOnline) {
+// return <Online />;
+// }
+// return <Offline />;
+
+return isOnline ? <Online /> : <Offline />;
+};
+//=//=//=//==
+const Offline = () => {
+return (
+
+<div className="status">
+<span className="status__text">Offline</span>
+<button className="status__btn">Reconnect</button>
+</div>
+);
+};
+
+export default Offline;
+
+//==//==//==//==//
+=//=/==/=LESSON=>7 => list
+//=//=//=
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.scss';
+// import App from './App.jsx';
+
+const rootElement = document.querySelector('#root');
+
+const numbers = [1, 2, 3, 4, 5, 6, 7];
+const element = (
+
+  <ul>
+    <li>{numbers[0]}</li>
+    <li>{numbers[1]}</li>
+    <li>{numbers[2]}</li>
+    <li>{numbers[3]}</li>
+    <li>{numbers[4]}</li>
+    <li>{numbers[5]}</li>
+    <li>{numbers[6]}</li>
+  </ul>
+);
+
+ReactDOM.render(element, rootElement);
+//=//
+const rootElement = document.querySelector('#root');
+
+const numbers = [1, 2, 3, 4, 5, 6, 7];
+
+const numbElement = numbers.map(num => <li>{num}</li>);
+const element = <ul>{numbElement}</ul>;
+
+ReactDOM.render(<ul>{element}</ul>, rootElement);
+
+// const element = (
+// <ul>
+// <li>{numbers[0]}</li>
+// <li>{numbers[1]}</li>
+// <li>{numbers[2]}</li>
+// <li>{numbers[3]}</li>
+// <li>{numbers[4]}</li>
+// <li>{numbers[5]}</li>
+// <li>{numbers[6]}</li>
+// </ul>
+// );
+
+// ReactDOM.render(element, rootElement);
+//
+import React from 'react';
+
+const NumberList = ({ numbers }) => {
+// const { numbers } = props;
+// const numberElements = numbers.map(num => <li>{num}</li>);
+// return <ul>{numberElements}</ul>;
+
+return (
+
+<ul>
+{numbers.map(num => (
+<li key={num}>{num}</li>
+))}
+</ul>
+);
+
+// = key: string & uniqum value !!!!!
+
+// const element = <ul>{numberElements}</ul>;
+// return element;
+};
+
+export default NumberList;
+//
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.scss';
+import UserList from './UserList';
+
+const rootElement = document.querySelector('#root');
+
+const users = [
+{
+id: 'id-0',
+age: 21,
+name: 'Bob',
+},
+{
+id: 'id-1',
+age: 17,
+name: 'Tom',
+},
+{
+id: 'id-2',
+age: 18,
+name: 'Tad',
+},
+{
+id: 'id-3',
+age: 45,
+name: 'Sam',
+},
+];
+
+ReactDOM.render(<UserList users={users} />, rootElement);
+//
+import React from 'react';
+import User from './User';
+
+class UserList extends React.Component {
+state = {
+sorting: null,
+};
+
+toggleSorting = () => {
+const newSorting = this.state.sorting === 'asc' ? 'desc' : 'asc';
+this.setState({
+sorting: newSorting,
+});
+};
+
+render() {
+console.log(this.props.users);
+let usersList;
+if (this.state.sorting) {
+usersList = this.props.users
+.slice()
+.sort((a, b) => (this.state.sorting === 'asc' ? a.age - b.age : b.age - a.age));
+} else {
+usersList = this.props.users;
+}
+
+    return (
+      <div>
+        <button className="btn" onClick={this.toggleSorting}>
+          {this.state.sorting || '-'}
+        </button>
+        <ul className="users">
+          {usersList.map(user => (
+            // <User key={user.name} name={user.name} age={user.age} />
+            <User key={user.id} {...user} />
+          ))}
+        </ul>
+      </div>
+    );
+
+}
+}
+
+export default UserList;
+//
+import React from 'react';
+
+const User = ({ name, age, id }) => {
+return (
+
+<li className="user">
+<span className="user__name">{name}</span>
+<span className="user__age">{age}</span>
+</li>
+);
+};
+
+export default User;
+
+// LESSON - 8 - <=> lifecycle methods
+
+stage
+Mounting
+constructor()
+static getDerivedStateFromProps()
+render()
+componentDidMount()
+//
+Update
+static getDerivedStateFromProps()
+shouldComponentUpdate()
+render()
+getSnapshotBeforeUpdate()
+componentDidUpdate()
+//
+Unmounting
+componentwillUnmount()
+//
+
+import React from 'react';
+import Life from './Life';
+
+class Demo extends React.Component {
+state = {
+number: Math.round(Math.random() \* 100),
+};
+
+show = () => {
+this.setState({
+visible: true,
+});
+};
+
+hide = () => {
+this.setState({
+visible: false,
+});
+};
+
+update = () => {
+this.setState({
+number: Math.round(Math.random() \* 100),
+});
+};
+
+render() {
+return (
+
+<div>
+<div>
+<button className="btn" onClick={this.show}>
+Show
+</button>
+<button className="btn" onClick={this.hide}>
+Hide
+</button>
+<button className="btn" onClick={this.update}>
+Update
+</button>
+</div>
+{this.state.visible && <Life number={this.state.number} />}
+</div>
+);
+}
+}
+
+// {this.state.visible && <Life number={this.state.numer} />}
+
+export default Demo;
+//
+componentDidMount() {
+console.log('=> componentDidMount'); // коли елементи вже насторінці (підписки, інціалізації)
+}
+
+shouldComponentUpdate(nextProps, nextState) {
+// this.props, this.state; => vonu e
+console.log(nextProps, nextState);
+console.log('=> shouldComponentUpdate'); // перед рендером на апдейт стадії, для оптимізації
+return nextProps.number % 2; // true or false => render will work when value true
+}
+
+componentDidUpdate(prevProps, prevState) {
+// this.props;
+console.log(prevProps);
+console.log('=> componentDidUpdate');
+}
+
+componentWillUnmount() {
+console.log('=> componentWillUnmount'); // для очистки, відписки, почистити дані, память тощо
+}
+
+// users component there
+
+render() {
+console.log('=> render');
+
+    return <div className="number">{this.props.number}</div>;
+
+}
+}
+
+export default Life;
+
+//
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.scss';
+// import Life from './Life.jsx';
+import Demo from './Demo';
+
+const rootElement = document.querySelector('#root');
+
+ReactDOM.render(<Demo />, rootElement);
+
+=> lesson9
+ref зчитати значення поля
+зчитати розмір елемента
+викликати фокус
