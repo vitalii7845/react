@@ -19,7 +19,7 @@ const App = () => {
         <Route exact path="/">
           <Home />
         </Route>
-        <Route path="/products" component={Products}></Route>
+        <Route path="/products" component={Products} />
       </BrowserRouter>
     </div>
   );
